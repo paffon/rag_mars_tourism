@@ -122,7 +122,6 @@ def synchronize_vector_db():
 
         if not hashes_to_add and not hashes_to_delete:
             logger.info("No changes detected. DB is synchronized with data files.")
-            logger.close(ACTION)
             return # Exit early if no changes
 
         if hashes_to_delete or hashes_to_add:
