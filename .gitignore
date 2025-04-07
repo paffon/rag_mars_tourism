@@ -1,0 +1,27 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# ChromaDB storage
+chroma_db_storage/
+
+# IDE folders
+.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editable installs
+*.egg-info/
+
+# Log files
+*.log
+
+# virtual environment
+venv/

@@ -1,0 +1,17 @@
+﻿*Spacecraft & Technology*
+What type of spacecraft is used?
+We utilize the advanced "Ares Voyager" class spacecraft, designed specifically for interplanetary travel. These spacecraft incorporate cutting-edge propulsion systems, life support technologies, and radiation shielding.
+How safe is the spacecraft?
+The "Ares Voyager" spacecraft is equipped with multiple layers of safety systems, including redundant life support, emergency propulsion, and advanced navigation systems. Rigorous testing and maintenance procedures are conducted before each mission.
+What are the spacecraft's safety features?
+Safety features include multiple redundant life support systems, radiation shielding, emergency escape pods, and advanced fire suppression systems. The crew is highly trained in emergency procedures.
+What is the in-flight entertainment like?
+In-flight entertainment includes a wide selection of movies, TV shows, games, and virtual reality experiences. Passengers can also access educational content about space exploration and Mars.
+Is there Wi-Fi on the spacecraft?
+Yes, the spacecraft is equipped with a high-bandwidth communication system, providing Wi-Fi access for passengers. However, due to signal latency, real time communication with earth will have a delay.
+How does the spacecraft handle radiation?
+The spacecraft incorporates advanced radiation shielding materials and systems to minimize exposure to cosmic radiation. Passengers also receive protective gear and are monitored for radiation levels throughout the trip.
+What is the propulsion system?
+The "Ares Voyager" utilizes a hybrid propulsion system combining ion thrusters for long-duration travel and chemical rockets for orbital maneuvers and landing.
+How is artificial gravity created?
+Artificial gravity is generated through the spacecraft's rotational motion. The spacecraft's design allows for a controlled spin, creating centrifugal force that simulates gravity.

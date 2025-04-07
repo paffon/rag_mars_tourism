@@ -1,0 +1,8 @@
+streamlit~=1.41.1
+llama-index
+llama-index-llms-openai
+llama-index-embeddings-openai
+llama-index-vector-stores-chroma
+chromadb~=0.6.3
+llama-index-core~=0.12.27
+python-dotenv~=1.1.0
