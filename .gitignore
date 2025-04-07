@@ -8,6 +8,7 @@ __pycache__/
 
 # ChromaDB storage
 chroma_db_storage/
+my_chroma_db/
 
 # IDE folders
 .idea/
