@@ -1,4 +1,5 @@
 # Mars Tourism FAQ Bot
+![image](https://github.com/user-attachments/assets/0e1cd18a-4506-450a-92f9-f3d8c1df0fe7)
 
 This project is a Streamlit application that provides a chatbot to answer questions about Mars tourism, using information from a collection of FAQ documents. It leverages LlamaIndex and OpenAI to provide context-aware responses.
 
