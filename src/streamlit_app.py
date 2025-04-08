@@ -33,31 +33,46 @@ def load_knowledge_base():
 
     try:
         logger.info("Attempting to load knowledge base for Streamlit app...")
-        # 1. Configure LlamaIndex Settings (ensure API key is available)
+        #  1. Configure LlamaIndex Settings (ensure API key is available)
         if not config.OPENAI_API_KEY:
-             logger.critical("Streamlit: OPENAI_API_KEY not found in config!")
-             st.error("OpenAI API Key not configured. Application cannot run.")
-             st.stop()
+            logger.critical("Streamlit: OPENAI_API_KEY not found in config!")
+            st.error("OpenAI API Key not configured. Application cannot run.")
+            st.stop()
 
         logger.debug("Configuring LlamaIndex settings for Streamlit session.")
-        # Re-configuring settings here is acceptable for Streamlit's separate process
-        Settings.llm = OpenAI(model=config.OPENAI_MODEL_NAME, api_key=config.OPENAI_API_KEY)
-        Settings.embed_model = OpenAIEmbedding(model=config.EMBEDDING_MODEL_NAME, api_key=config.OPENAI_API_KEY)
+        #  Re-configuring settings here is acceptable for Streamlit's separate process
+        Settings.llm = OpenAI(
+            model=config.OPENAI_MODEL_NAME, api_key=config.OPENAI_API_KEY
+        )
+        Settings.embed_model = OpenAIEmbedding(
+            model=config.EMBEDDING_MODEL_NAME, api_key=config.OPENAI_API_KEY
+        )
         logger.debug("LlamaIndex settings configured.")
 
-        # 2. Load the index using updated chroma_utils function
-        logger.debug("Getting Chroma client and collection...")
+        #  2. Load the index using updated chroma_utils function
+        logger.debug("Getting Chroma client...")
         chroma_client = chroma_utils.get_chroma_client()
-        chroma_collection = chroma_utils.get_or_create_chroma_collection(chroma_client) # Get existing collection
+        logger.debug("Getting Chroma collection...")
+        chroma_collection = (
+            chroma_utils.get_or_create_chroma_collection(chroma_client)
+        )  #  Get existing collection
+
+        #  Log client and collection info
+        logger.debug(f"Chroma Client: {chroma_client}")
+        logger.debug(f"Chroma Collection: {chroma_collection}")
+
         logger.debug("Loading index structure from storage context...")
-        # Use the correct function to get the index object
+        #  Use the correct function to get the index object
         idx, _ = chroma_utils.get_index_and_storage_context(chroma_collection)
         logger.info("Knowledge base index loaded successfully for Streamlit.")
 
     except Exception as e:
-        st.error(f"Fatal error loading knowledge base: {e}. Please ensure the database is accessible and updated (run main.py).")
+        st.error(
+            f"Fatal error loading knowledge base: {e}. "
+            "Please ensure the database is accessible and updated (run main.py)."
+        )
         logger.critical(f"Streamlit: Failed to load index: {e}", exc_info=True)
-        st.stop() # Stop streamlit app if index cannot be loaded
+        st.stop()  #  Stop streamlit app if index cannot be loaded
     finally:
         logger.close(ACTION)
 

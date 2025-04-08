@@ -13,6 +13,7 @@ from src.logger.logger import MyLogger
 
 logger = MyLogger(config.LOG_NAME)
 
+
 def get_chroma_client() -> ChromaClientAPI:
     """
     Initializes and returns a persistent ChromaDB client.
@@ -25,12 +26,14 @@ def get_chroma_client() -> ChromaClientAPI:
     try:
         os.makedirs(config.PERSIST_DIR, exist_ok=True)
         client = chromadb.PersistentClient(path=config.PERSIST_DIR)
+        logger.info(f"Chroma client initialized with path: {config.PERSIST_DIR}")
         return client
     except Exception as e:
         logger.critical(f"Failed to initialize ChromaDB client: {e}", exc_info=True)
         raise RuntimeError("ChromaDB client initialization failed.")
     finally:
         logger.close(ACTION)
+
 
 def get_or_create_chroma_collection(client: ChromaClientAPI) -> ChromaCollection:
     """
@@ -43,7 +46,10 @@ def get_or_create_chroma_collection(client: ChromaClientAPI) -> ChromaCollection
     ACTION = f"Get/Create Chroma Collection"
     logger.start(ACTION)
     try:
-        collection = client.get_or_create_collection(config.CHROMA_COLLECTION_NAME)
+        collection_name = config.CHROMA_COLLECTION_NAME
+        logger.debug(f"Attempting to get or create collection: {collection_name}")
+        collection = client.get_or_create_collection(collection_name)
+        logger.info(f"Successfully got or created collection: {collection.name}")
         return collection
     except Exception as e:
         logger.critical(f"Failed to get/create collection: {e}", exc_info=True)
@@ -51,7 +57,10 @@ def get_or_create_chroma_collection(client: ChromaClientAPI) -> ChromaCollection
     finally:
         logger.close(ACTION)
 
-def get_index_and_storage_context(collection: ChromaCollection) -> Tuple[VectorStoreIndex, StorageContext]:
+
+def get_index_and_storage_context(
+    collection: ChromaCollection,
+) -> Tuple[VectorStoreIndex, StorageContext]:
     """
     Creates LlamaIndex index and storage context from a Chroma collection.
 
@@ -69,9 +78,17 @@ def get_index_and_storage_context(collection: ChromaCollection) -> Tuple[VectorS
             raise RuntimeError("Embed model not configured.")
 
         if collection.count() > 0:
-            index = VectorStoreIndex.from_vector_store(vector_store=vector_store, storage_context=storage_context)
+            index = VectorStoreIndex.from_vector_store(
+                vector_store=vector_store, storage_context=storage_context
+            )
+            logger.info("Index loaded from existing data.")
         else:
-            index = VectorStoreIndex.from_documents(documents=[], storage_context=storage_context, embed_model=Settings.embed_model)
+            index = VectorStoreIndex.from_documents(
+                documents=[],
+                storage_context=storage_context,
+                embed_model=Settings.embed_model,
+            )
+            logger.info("Created new index.")
 
         return index, storage_context
     except Exception as e:
@@ -80,9 +97,13 @@ def get_index_and_storage_context(collection: ChromaCollection) -> Tuple[VectorS
     finally:
         logger.close(ACTION)
 
-def get_all_qna_hashes_from_db(collection: ChromaCollection) -> Dict[str, str]:
+
+def get_all_qna_hashes_from_db(
+    collection: ChromaCollection,
+) -> Dict[str, str]:
     """
-    Retrieves a mapping of all QnA hashes to their corresponding document IDs in the collection.
+    Retrieves a mapping of all QnA hashes to their corresponding document IDs
+    in the collection.
 
     :param collection: Chroma collection to query.
     :return: Dictionary mapping qna_hash -> document_id.
@@ -101,6 +122,7 @@ def get_all_qna_hashes_from_db(collection: ChromaCollection) -> Dict[str, str]:
                 if qna_hash:
                     mapping[qna_hash] = doc_id
 
+        logger.info(f"Retrieved {len(mapping)} QnA hashes from the database.")
         return mapping
     except Exception as e:
         logger.error(f"Failed to retrieve QnA hashes: {e}", exc_info=True)
@@ -108,7 +130,10 @@ def get_all_qna_hashes_from_db(collection: ChromaCollection) -> Dict[str, str]:
     finally:
         logger.close(ACTION)
 
-def delete_documents_by_qna_hash(collection: ChromaCollection, qna_hashes_to_delete: Set[str]) -> None:
+
+def delete_documents_by_qna_hash(
+    collection: ChromaCollection, qna_hashes_to_delete: Set[str]
+) -> None:
     """
     Deletes documents in the collection matching any of the provided QnA hashes.
 
@@ -116,18 +141,23 @@ def delete_documents_by_qna_hash(collection: ChromaCollection, qna_hashes_to_del
     :param qna_hashes_to_delete: Set of QnA hashes identifying documents to delete.
     """
     if not qna_hashes_to_delete:
+        logger.warning("No QnA hashes provided for deletion.")
         return
 
     ACTION = f"Delete Documents by QnA Hash"
     logger.start(ACTION)
     try:
-        collection.delete(where={"qna_hash": {"$in": list(qna_hashes_to_delete)}})  # type: ignore
+        collection.delete(where={"qna_hash": {"$in": list(qna_hashes_to_delete)}})  #  type: ignore
+        logger.info(f"Deleted {len(qna_hashes_to_delete)} documents.")
     except Exception as e:
         logger.error(f"Failed to delete documents: {e}", exc_info=True)
     finally:
         logger.close(ACTION)
 
-def create_document_from_qna(file_path: str, subject: str, question: str, answer: str, qna_hash: str) -> Document:
+
+def create_document_from_qna(
+    file_path: str, subject: str, question: str, answer: str, qna_hash: str
+) -> Document:
     """
     Constructs a LlamaIndex Document using given QnA metadata.
 
