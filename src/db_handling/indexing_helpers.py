@@ -98,8 +98,11 @@ def insert_documents_to_index(
     index: VectorStoreIndex, documents: List[Document]
 ) -> bool:
     """
-    Inserts a list of LlamaIndex Documents into the specified index.
-    Returns True on success, False on failure.
+    Insert LlamaIndex Document nodes into a given index.
+
+    :param index: Target VectorStoreIndex where documents will be inserted.
+    :param documents: List of LlamaIndex Document objects to insert.
+    :return: True if insertion succeeds or no documents are given; False if an exception occurs during insertion.
     """
     if not documents:
         logger.info("Document Insertion: No documents provided to insert.")
