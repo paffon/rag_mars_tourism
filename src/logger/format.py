@@ -4,8 +4,14 @@ from typing import Literal, List, Tuple
 
 def format_duration(seconds: float, decimals: int = 2) -> str:
     """
-    Format a given number of seconds into a colon-separated string dynamically,
-    starting from the largest non-zero unit (years, days, hours, minutes, or seconds).
+    Formats a duration in seconds into a human-readable string.
+
+    Handles durations of years, days, hours, minutes, and seconds.
+    Rounds fractional seconds to the specified number of decimals.
+
+    :param seconds: Duration in seconds.
+    :param decimals: Number of decimal places for fractional seconds when < 60.
+    :return: Formatted duration string.
     """
     if seconds >= 60:
         seconds = int(seconds)
