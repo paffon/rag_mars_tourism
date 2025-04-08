@@ -23,6 +23,7 @@ DATA_DIR = os.getenv("DATA_DIR", os.path.join(_BASE_DIR, "data"))  # Default val
 PERSIST_DIR = os.getenv("PERSIST_DIR", os.path.join(_BASE_DIR, "chroma_db_storage"))  # Default value provided
 HASH_FILE = os.getenv("HASH_FILE", os.path.join(_BASE_DIR, "hash_of_vectorized_data.txt"))  # Default value provided
 LOGO_PATH = os.getenv("LOGO_PATH", os.path.join(_BASE_DIR, "../assets/logo.png"))  # Default value provided
+LOGS_DIR = os.getenv("LOGS_DIR", os.path.join(_BASE_DIR, "logs"))  # Add this line
 
 # --- LlamaIndex/ChromaDB Configuration ---
 CHROMA_COLLECTION_NAME = os.getenv("CHROMA_COLLECTION_NAME", "mars_faq_qa_v2")  # Default value provided

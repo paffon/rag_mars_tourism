@@ -10,6 +10,9 @@ __pycache__/
 chroma_db_storage/
 my_chroma_db/
 
+# Logs
+logs/
+
 # IDE folders
 .idea/
 .vscode/

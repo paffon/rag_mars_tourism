@@ -4,6 +4,7 @@ import webbrowser
 import sys
 import os
 import socket
+from datetime import datetime
 
 # Ensure the 'src' directory is in the Python path
 current_dir: str = os.path.dirname(os.path.abspath(__file__))
@@ -17,6 +18,13 @@ from src.db_handling import indexing
 # Initialize logger
 logger = MyLogger(config.LOG_NAME)
 logger.setLevel(config.LOG_LEVEL)
+
+# Set the log file with a timestamp, using config
+logs_dir = os.path.join(project_root, config.LOGS_DIR)
+os.makedirs(logs_dir, exist_ok=True)  # Create the directory if it doesn't already exist
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+log_file_path = os.path.join(logs_dir, f'app_{timestamp}.log')
+logger.set_log_file(log_file_path)
 
 
 def is_streamlit_running(url: str) -> bool:
